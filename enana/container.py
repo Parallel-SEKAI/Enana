@@ -1,6 +1,6 @@
 from typing import List, Optional, Tuple
 
-from .painter import Painter, TextPainter
+from .painter import Painter
 from .typing import BorderRadius, Margin, Padding
 from .widget import Widget
 
@@ -126,7 +126,3 @@ class Container(Widget):
                 painter.offset_y += self._padding.top + self._margin.top
                 painters.append(painter)
         return painters
-
-    @property
-    def text_painters(self) -> List[TextPainter]:
-        return self._child.text_painters if self._child is not None else []

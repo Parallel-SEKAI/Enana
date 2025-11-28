@@ -2,7 +2,8 @@ from math import ceil
 from pathlib import Path
 from typing import List, Tuple
 
-from .generator import generate_image
+from .generator import draw_text, generate_image
+from .painter import TextPainter
 from .widget import Widget
 
 
@@ -53,6 +54,18 @@ class Page:
             height=ceil(self.child.height * scale),
             filename=filename,
         )
+
+        for text_painter in painters:
+            if isinstance(text_painter, TextPainter):
+                draw_text(
+                    image=filename,
+                    text=text_painter.text,
+                    position=(int(text_painter.offset_x), int(text_painter.offset_y)),
+                    color=text_painter.color,
+                    font=text_painter.font,
+                    font_size=text_painter.font_size,
+                    max_width=text_painter.max_width,
+                )
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({', '.join([f'{k}={v}' for k, v in self.__dict__.items() if not k.startswith('_')])})"

@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from .painter import Painter, TextPainter
+from .painter import Painter
 
 
 class Widget:
@@ -14,12 +14,6 @@ class Widget:
     def painters(self) -> List[Painter]:
         raise NotImplementedError(
             "painters property must be implemented in subclass"
-        )
-
-    @property
-    def text_painters(self) -> List[TextPainter]:
-        raise NotImplementedError(
-            "text_painters property must be implemented in subclass"
         )
 
     @property

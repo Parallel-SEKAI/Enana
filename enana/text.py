@@ -22,10 +22,6 @@ class Text(Widget):
 
     @property
     def painters(self) -> List[Painter]:
-        return []
-
-    @property
-    def text_painters(self) -> List[TextPainter]:
         return [
             TextPainter(
                 text=self._text,

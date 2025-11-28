@@ -1,6 +1,8 @@
 import time
 from typing import Callable, Optional, Tuple
 
+from .utils import always_false
+
 
 class Painter:
     def __init__(
@@ -30,7 +32,7 @@ class Painter:
         return f"{self.__class__.__name__}({', '.join([f'{k}={v}' for k, v in self.__dict__.items() if not k.startswith('_')])})"
 
 
-class TextPainter:
+class TextPainter(Painter):
     def __init__(
         self,
         *,
@@ -40,7 +42,12 @@ class TextPainter:
         max_width: Optional[int] = None,
         color: Tuple[int, int, int, int],
     ):
+        super().__init__(
+            width=0, height=0, func=always_false, color=(0, 0, 0, 0)
+        )
         self.text = text
+        self.font = font
+        self.font_size = font_size
         self.max_width = max_width
         self.color = color
 

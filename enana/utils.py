@@ -15,6 +15,20 @@ def always_true(x: int | float, y: int | float) -> bool:
     return True
 
 
+def always_false(x: int | float, y: int | float) -> bool:
+    """
+    始终返回False的函数，用于Painter的func参数
+
+    Args:
+        x: x坐标
+        y: y坐标
+
+    Returns:
+        bool: 始终返回False
+    """
+    return False
+
+
 def hex_to_rgba(hex_color: int) -> Tuple[int, int, int, int]:
     """
     将16进制颜色字符串转换为RGBA元组

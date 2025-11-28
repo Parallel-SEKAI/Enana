@@ -47,8 +47,14 @@ def main():
             ["flake8", path, "--max-line-length", "140"] + (["--color", "always"] if colored else []),
             f"Flake8 (code quality check) for {path}"
         )
+        
+        # 4. 运行 Mypy 类型检查
+        run_command(
+            ["mypy", path] + (["--color"] if colored else []),
+            f"Mypy (type checking) for {path}"
+        )
 
-    # 4. 运行 Pytest 测试
+    # 5. 运行 Pytest 测试
     run_command(
         ["pytest"] + (["--color=yes"] if colored else []),
         "Pytest (tests)"

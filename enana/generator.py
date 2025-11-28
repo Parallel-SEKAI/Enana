@@ -1,8 +1,10 @@
 import multiprocessing
+import os
+import sys
 from pathlib import Path
-from typing import Callable, List, Tuple
+from typing import Any, Callable, List, Optional, Tuple, Union
 
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 
 try:
     # Get the number of CPU cores for multiprocessing
@@ -75,3 +77,68 @@ def generate_image(
     img.putdata(pixel_data)
     # Save the image
     img.save(filename)
+
+
+def draw_text(
+    image: Path,
+    text: str,
+    position: Tuple[int, int],
+    color: Tuple[int, int, int, int],
+    font: Union[str, Any] = "Arial",
+    font_size: int = 12,
+    max_width: Optional[int] = None,
+):
+    print(
+        f"draw_text({', '.join((f'{key}={value}' for key, value in locals().items()))})"
+    )
+    # Open the image
+    img = Image.open(image)
+    # Get the image size
+    width, height = img.size
+    # Create a font object
+    font_obj: Any
+    try:
+        # Check if font is already a font object
+        if hasattr(font, "getbbox"):
+            # Already a font object, use it directly
+            font_obj = font
+        else:
+            # Try to load the specified font
+            font_obj = ImageFont.truetype(font, font_size)
+    except OSError:
+        # If the specified font fails, try to find a fallback font
+        try:
+            # Try common Windows fonts
+            if sys.platform == "win32":
+                # Try to find Arial or a similar font
+                font_files = [
+                    "arial.ttf",
+                    "calibri.ttf",
+                    "times.ttf",
+                    "verdana.ttf",
+                ]
+                font_obj = None
+                for font_file in font_files:
+                    try:
+                        font_path = os.path.join(
+                            r"C:\Windows\Fonts", font_file
+                        )
+                        font_obj = ImageFont.truetype(font_path, font_size)
+                        break
+                    except OSError:
+                        continue
+                # If no Windows font found, use default font
+                if font_obj is None:
+                    font_obj = ImageFont.load_default()
+            else:
+                # On non-Windows platforms, use default font
+                font_obj = ImageFont.load_default()
+        except Exception:
+            # Fallback to default font if all else fails
+            font_obj = ImageFont.load_default()
+    # Create a drawing context
+    draw = ImageDraw.Draw(img)
+    # Draw the text on the image
+    draw.text(position, text, font=font_obj, fill=color)
+    # Save the image
+    img.save(image)

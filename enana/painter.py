@@ -35,11 +35,13 @@ class TextPainter:
         self,
         *,
         text: str,
-        width: Optional[int] = None,
+        font: str = "Arial",
+        font_size: int = 12,
+        max_width: Optional[int] = None,
         color: Tuple[int, int, int, int],
     ):
         self.text = text
-        self.width = width
+        self.max_width = max_width
         self.color = color
 
     def __repr__(self) -> str:

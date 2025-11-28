@@ -22,5 +22,5 @@ where = ["."]
 include = ["enana*"]
 
 [tool.black]
-line-length = 140
+line-length = 79
 target-version = ['py313']

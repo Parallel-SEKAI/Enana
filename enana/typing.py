@@ -1,5 +1,12 @@
 class Padding:
-    def __init__(self, *, top: int | float, right: int | float, bottom: int | float, left: int | float):
+    def __init__(
+        self,
+        *,
+        top: int | float,
+        right: int | float,
+        bottom: int | float,
+        left: int | float,
+    ):
         self.top = top
         self.right = right
         self.bottom = bottom
@@ -14,8 +21,12 @@ class Padding:
         return cls(top=value, right=value, bottom=value, left=value)
 
     @classmethod
-    def symmetric(cls, vertical: int | float, horizontal: int | float) -> "Padding":
-        return cls(top=vertical, right=horizontal, bottom=vertical, left=horizontal)
+    def symmetric(
+        cls, vertical: int | float, horizontal: int | float
+    ) -> "Padding":
+        return cls(
+            top=vertical, right=horizontal, bottom=vertical, left=horizontal
+        )
 
     @property
     def vertical(self) -> int | float:
@@ -24,7 +35,7 @@ class Padding:
     @property
     def horizontal(self) -> int | float:
         return self.left + self.right
-    
+
     def __bool__(self) -> bool:
         return any([self.top, self.right, self.bottom, self.left])
 
@@ -37,7 +48,14 @@ class Margin(Padding):
 
 
 class BorderRadius:
-    def __init__(self, *, top_left: int | float, top_right: int | float, bottom_right: int | float, bottom_left: int | float):
+    def __init__(
+        self,
+        *,
+        top_left: int | float,
+        top_right: int | float,
+        bottom_right: int | float,
+        bottom_left: int | float,
+    ):
         self.top_left = top_left
         self.top_right = top_right
         self.bottom_right = bottom_right
@@ -49,4 +67,9 @@ class BorderRadius:
 
     @classmethod
     def all(cls, value: int | float) -> "BorderRadius":
-        return cls(top_left=value, top_right=value, bottom_right=value, bottom_left=value)
+        return cls(
+            top_left=value,
+            top_right=value,
+            bottom_right=value,
+            bottom_left=value,
+        )

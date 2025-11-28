@@ -12,11 +12,15 @@ class Widget:
 
     @property
     def painters(self) -> List[Painter]:
-        raise NotImplementedError("painters property must be implemented in subclass")
+        raise NotImplementedError(
+            "painters property must be implemented in subclass"
+        )
 
     @property
     def text_painters(self) -> List[TextPainter]:
-        raise NotImplementedError("text_painters property must be implemented in subclass")
+        raise NotImplementedError(
+            "text_painters property must be implemented in subclass"
+        )
 
     @property
     def width(self) -> int | float:
@@ -27,7 +31,9 @@ class Widget:
     @property
     def height(self) -> int | float:
         if self._height is None:
-            raise NotImplementedError("height property must be set in subclass")
+            raise NotImplementedError(
+                "height property must be set in subclass"
+            )
         return self._height
 
     def __repr__(self) -> str:

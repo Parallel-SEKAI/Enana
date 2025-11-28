@@ -1,6 +1,14 @@
 from pathlib import Path
 
-from enana import BorderRadius, Container, Margin, Padding, Page, hex_to_rgba
+from enana import (
+    BorderRadius,
+    Container,
+    Margin,
+    Padding,
+    Page,
+    Text,
+    hex_to_rgba,
+)
 
 
 def test_enana():
@@ -9,11 +17,14 @@ def test_enana():
             color=hex_to_rgba(0xDDAACCFF),
             padding=Padding(left=10, top=10, right=10, bottom=10),
             margin=Margin(left=10, top=10, right=10, bottom=10),
-            border_radius=BorderRadius(top_left=10, top_right=10, bottom_left=10, bottom_right=10),
+            border_radius=BorderRadius(
+                top_left=10, top_right=10, bottom_left=10, bottom_right=10
+            ),
             child=Container(
                 width=50,
                 height=50,
                 color=hex_to_rgba(0x39C5BBFF),
+                child=Text(text="Hello"),
             ),
         )
     ).paint(filename=Path("test.png"))

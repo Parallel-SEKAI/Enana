@@ -59,7 +59,10 @@ def generate_image(
         # Calculate the height of each chunk
         chunk_size = height // CPU_COUNT
         # Create a list of tasks, where each task processes a chunk of the image
-        tasks = [(func, i * chunk_size, (i + 1) * chunk_size, width) for i in range(CPU_COUNT)]
+        tasks = [
+            (func, i * chunk_size, (i + 1) * chunk_size, width)
+            for i in range(CPU_COUNT)
+        ]
         # Ensure the last task processes up to the bottom of the image
         tasks[-1] = (func, tasks[-1][1], height, width)
         # Execute the tasks in parallel using starmap

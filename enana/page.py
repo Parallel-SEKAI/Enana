@@ -30,7 +30,7 @@ class DrawFunction:
         _x = x / self.scale
         _y = y / self.scale
         for painter in self.painters:
-            if painter.paint(_x, _y):
+            if painter.paint(_x, _y) and all(painter.color):
                 return painter.color
         return (0, 0, 0, 0)
 
@@ -46,7 +46,7 @@ class Page:
         # 创建可序列化的绘制函数对象
         draw = DrawFunction(painters, scale)
 
-        print("\n".join([repr(painter) for painter in painters]))
+        # print("\n".join([repr(painter) for painter in painters]))
 
         generate_image(
             func=draw,
@@ -60,7 +60,10 @@ class Page:
                 draw_text(
                     image=filename,
                     text=text_painter.text,
-                    position=(int(text_painter.offset_x), int(text_painter.offset_y)),
+                    position=(
+                        int(text_painter.offset_x),
+                        int(text_painter.offset_y),
+                    ),
                     color=text_painter.color,
                     font=text_painter.font,
                     font_size=text_painter.font_size,

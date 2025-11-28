@@ -88,9 +88,6 @@ def draw_text(
     font_size: int = 12,
     max_width: Optional[int] = None,
 ):
-    print(
-        f"draw_text({', '.join((f'{key}={value}' for key, value in locals().items()))})"
-    )
     # Open the image
     img = Image.open(image)
     # Get the image size

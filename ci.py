@@ -23,31 +23,34 @@ def run_command(command, description):
 
 def main():
     print("🚀 Starting CI/CD checks...")
-    colored = False
-    if "--color" in sys.argv:
-        colored = True
-        
+    colored = "--color" in sys.argv
+    check = "--check" in sys.argv
+
     paths = ["enana/", "tests/"]
-    
+
     for path in paths:
         # 1. 运行 isort 检查导入排序
-        run_command(
-            ["isort", path, "--profile", "black"] + (["--color"] if colored else []),
-            f"isort (import sorting check) for {path}"
-        )
+        isort_command = ["isort", path, "--profile", "black"]
+        if check:
+            isort_command.append("--check-only")
+        if colored:
+            isort_command.append("--color")
+        run_command(isort_command, f"isort (import sorting check) for {path}")
 
         # 2. 运行 Black 代码格式化检查
-        run_command(
-            ["black", path] + (["--color"] if colored else []),
-            f"Black (code formatting check) for {path}"
-        )
+        black_command = ["black", path]
+        if check:
+            black_command.append("--check")
+        if colored:
+            black_command.append("--color")
+        run_command(black_command, f"Black (code formatting check) for {path}")
 
         # 3. 运行 Flake8 代码质量检查
         run_command(
             ["flake8", path, "--max-line-length", "140"] + (["--color", "always"] if colored else []),
             f"Flake8 (code quality check) for {path}"
         )
-        
+
         # 4. 运行 Mypy 类型检查
         run_command(
             ["mypy", path] + (["--color"] if colored else []),

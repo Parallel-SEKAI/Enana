@@ -8,6 +8,8 @@ from .row import *
 from .text import *
 from .utils import *
 from .widget import *
+from .image import *
+
 
 __all__ = [
     "Column",
@@ -18,4 +20,6 @@ __all__ = [
     "Text",
     "Widget",
     "hex_to_rgba",
+    "Image",
+    "ImageSize",
 ]

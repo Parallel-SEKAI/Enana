@@ -139,3 +139,33 @@ def draw_text(
 
     # Save the image
     img.save(image)
+
+
+def draw_image(
+    image: Path,
+    image_painter: "ImagePainter",
+    scale: float,
+):
+    """
+    在图片上绘制另一个图片
+
+    Args:
+        image: 目标图片路径
+        image_painter: ImagePainter对象，包含要绘制的图片和相关参数
+        scale: 缩放比例
+    """
+    # 打开目标图片
+    img = Image.open(image)
+
+    # 在渲染时调用_resize_image方法，并传递scale因子
+    resized_image = image_painter._resize_image(scale)
+
+    # 计算绘制位置
+    x = int(image_painter.offset_x * scale)
+    y = int(image_painter.offset_y * scale)
+
+    # 绘制图片
+    img.paste(resized_image, (x, y), resized_image)
+
+    # 保存图片
+    img.save(image)

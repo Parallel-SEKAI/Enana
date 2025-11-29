@@ -2,8 +2,8 @@ from math import ceil
 from pathlib import Path
 from typing import List, Tuple
 
-from .generator import draw_text, generate_image
-from .painter import TextPainter
+from .generator import draw_text, generate_image, draw_image
+from .painter import TextPainter, ImagePainter
 from .widget import Widget
 
 
@@ -72,6 +72,14 @@ class Page:
                         if text_painter.max_width is not None
                         else None
                     ),
+                )
+
+        for image_painter in painters:
+            if isinstance(image_painter, ImagePainter):
+                draw_image(
+                    image=filename,
+                    image_painter=image_painter,
+                    scale=scale,
                 )
 
     def __repr__(self) -> str:

@@ -10,6 +10,21 @@ class Widget:
     def __init__(self):
         pass
 
+    @classmethod
+    def from_json(cls, json: dict) -> "Widget":
+        """
+        从JSON字典创建Widget对象
+
+        Args:
+            json: JSON字典，符合widget.schema.json
+
+        Returns:
+            Widget: 对应的Widget对象
+        """
+        from .utils import from_json
+
+        return from_json(json)
+
     @property
     def painters(self) -> List[Painter]:
         raise NotImplementedError(

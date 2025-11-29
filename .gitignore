@@ -11,4 +11,4 @@ wheels/
 .venv
 
 .trae
-test.png
+*.png

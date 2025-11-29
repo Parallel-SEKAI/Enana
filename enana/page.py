@@ -35,9 +35,24 @@ class DrawFunction:
         return (0, 0, 0, 0)
 
 
-class Page:
+class Page(Widget):
     def __init__(self, *, child: Widget):
         self.child: Widget = child
+
+    @classmethod
+    def from_json(cls, json: dict) -> "Page":
+        """
+        从JSON字典创建Page对象
+
+        Args:
+            json: JSON字典，符合page.schema.json
+
+        Returns:
+            Page: 对应的Page对象
+        """
+        widget = super().from_json(json)
+        assert isinstance(widget, Page)
+        return widget
 
     def paint(self, *, scale: float = 1.0, filename: Path) -> None:
         painters = self.child.painters

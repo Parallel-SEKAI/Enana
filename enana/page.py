@@ -2,8 +2,8 @@ from math import ceil
 from pathlib import Path
 from typing import List, Tuple
 
-from .generator import draw_text, generate_image, draw_image
-from .painter import TextPainter, ImagePainter
+from .generator import draw_image, draw_text, generate_image
+from .painter import ImagePainter, TextPainter
 from .widget import Widget
 
 

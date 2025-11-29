@@ -4,6 +4,8 @@ from typing import Any, Callable, List, Optional, Tuple, Union
 
 from PIL import Image, ImageDraw
 
+from .painter import ImagePainter
+
 try:
     # Get the number of CPU cores for multiprocessing
     CPU_COUNT = multiprocessing.cpu_count()

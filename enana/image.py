@@ -1,8 +1,9 @@
+import base64
+import io
 from enum import Enum
 from typing import List
+
 from PIL import Image as PILImage
-import io
-import base64
 
 from .painter import Painter
 from .widget import Widget
@@ -60,11 +61,15 @@ class Image(Widget):
     def painters(self) -> List[Painter]:
         from .painter import ImagePainter
 
+        # 使用类型断言确保类型安全
+        width: int | float = self._width  # type: ignore
+        height: int | float = self._height  # type: ignore
+
         return [
             ImagePainter(
                 image=self._image,
-                width=self._width,
-                height=self._height,
+                width=width,
+                height=height,
                 size=self._size,
             )
         ]

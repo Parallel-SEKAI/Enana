@@ -1,0 +1,47 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Parallel-SEKAI/Enana/refs/heads/main/widget.schema.json",
+  "type": "Page",
+  "child": {
+    "type": "Column",
+    "children": [
+      {
+        "type": "Container",
+        "color": [255, 100, 100, 255],
+        "padding": 20,
+        "border_radius": 10,
+        "child": {
+          "type": "Text",
+          "text": "欢迎使用Enana UI",
+          "font_size": 24,
+          "color": [255, 255, 255, 255]
+        }
+      },
+      {
+        "type": "Row",
+        "children": [
+          {
+            "type": "Image",
+            "url": "https://www.gstatic.com/images/branding/searchlogo/ico/favicon.ico",
+            "width": 100,
+            "height": 100,
+            "size": "cover"
+          },
+          {
+            "type": "Image",
+            "url": "https://www.gstatic.com/images/branding/searchlogo/ico/favicon.ico",
+            "width": 100,
+            "height": 100,
+            "size": "contain"
+          }
+        ]
+      },
+      {
+        "type": "Text",
+        "text": "这是一段示例文本，展示了如何在Enana UI中使用文本组件。文本可以自动换行，并且可以设置字体大小和颜色。",
+        "max_width": 300,
+        "font_size": 16,
+        "color": [50, 50, 50, 255]
+      }
+    ]
+  }
+}

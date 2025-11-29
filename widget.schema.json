@@ -1,0 +1,567 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://raw.githubusercontent.com/Parallel-SEKAI/Enana/refs/heads/main/widget.schema.json",
+    "title": "Enana UI Component Schema",
+    "description": "JSON Schema for Enana UI components",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "#/definitions/Page"
+        },
+        {
+            "$ref": "#/definitions/Container"
+        },
+        {
+            "$ref": "#/definitions/Column"
+        },
+        {
+            "$ref": "#/definitions/Row"
+        },
+        {
+            "$ref": "#/definitions/Text"
+        },
+        {
+            "$ref": "#/definitions/Image"
+        }
+    ],
+    "definitions": {
+        "Widget": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "组件类型"
+                }
+            },
+            "required": [
+                "type"
+            ]
+        },
+        "BaseComponent": {
+            "type": "object",
+            "properties": {
+                "width": {
+                    "anyOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "number"
+                        }
+                    ],
+                    "description": "组件宽度"
+                },
+                "height": {
+                    "anyOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "number"
+                        }
+                    ],
+                    "description": "组件高度"
+                },
+                "color": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 255
+                    },
+                    "minItems": 4,
+                    "maxItems": 4,
+                    "description": "RGBA颜色值，格式：[红, 绿, 蓝, 透明度]"
+                },
+                "padding": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/Padding"
+                        },
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "number"
+                        }
+                    ],
+                    "description": "内边距"
+                },
+                "margin": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/Margin"
+                        },
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "number"
+                        }
+                    ],
+                    "description": "外边距"
+                },
+                "border_radius": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/BorderRadius"
+                        },
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "number"
+                        }
+                    ],
+                    "description": "圆角半径"
+                }
+            }
+        },
+        "Page": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Widget"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "const": "Page"
+                        },
+                        "child": {
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/Container"
+                                },
+                                {
+                                    "$ref": "#/definitions/Column"
+                                },
+                                {
+                                    "$ref": "#/definitions/Row"
+                                },
+                                {
+                                    "$ref": "#/definitions/Text"
+                                },
+                                {
+                                    "$ref": "#/definitions/Image"
+                                }
+                            ],
+                            "description": "页面的子组件"
+                        }
+                    },
+                    "required": [
+                        "type",
+                        "child"
+                    ]
+                }
+            ]
+        },
+        "Container": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Widget"
+                },
+                {
+                    "$ref": "#/definitions/BaseComponent"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "const": "Container"
+                        },
+                        "child": {
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/Container"
+                                },
+                                {
+                                    "$ref": "#/definitions/Column"
+                                },
+                                {
+                                    "$ref": "#/definitions/Row"
+                                },
+                                {
+                                    "$ref": "#/definitions/Text"
+                                },
+                                {
+                                    "$ref": "#/definitions/Image"
+                                }
+                            ],
+                            "description": "容器的子组件"
+                        }
+                    },
+                    "required": [
+                        "type"
+                    ]
+                }
+            ]
+        },
+        "Column": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Widget"
+                },
+                {
+                    "$ref": "#/definitions/BaseComponent"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "const": "Column"
+                        },
+                        "children": {
+                            "type": "array",
+                            "items": {
+                                "oneOf": [
+                                    {
+                                        "$ref": "#/definitions/Container"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/Column"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/Row"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/Text"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/Image"
+                                    }
+                                ]
+                            },
+                            "description": "垂直排列的子组件列表"
+                        }
+                    },
+                    "required": [
+                        "type",
+                        "children"
+                    ]
+                }
+            ]
+        },
+        "Row": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Widget"
+                },
+                {
+                    "$ref": "#/definitions/BaseComponent"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "const": "Row"
+                        },
+                        "children": {
+                            "type": "array",
+                            "items": {
+                                "oneOf": [
+                                    {
+                                        "$ref": "#/definitions/Container"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/Column"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/Row"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/Text"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/Image"
+                                    }
+                                ]
+                            },
+                            "description": "水平排列的子组件列表"
+                        }
+                    },
+                    "required": [
+                        "type",
+                        "children"
+                    ]
+                }
+            ]
+        },
+        "Text": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Widget"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "const": "Text"
+                        },
+                        "text": {
+                            "type": "string",
+                            "description": "文本内容"
+                        },
+                        "font": {
+                            "type": "string",
+                            "default": "Arial",
+                            "description": "字体名称"
+                        },
+                        "font_size": {
+                            "type": "integer",
+                            "default": 12,
+                            "description": "字体大小"
+                        },
+                        "max_width": {
+                            "type": "integer",
+                            "description": "文本最大宽度，超过则自动换行"
+                        },
+                        "color": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 255
+                            },
+                            "minItems": 4,
+                            "maxItems": 4,
+                            "default": [
+                                0,
+                                0,
+                                0,
+                                255
+                            ],
+                            "description": "RGBA颜色值，格式：[红, 绿, 蓝, 透明度]"
+                        }
+                    },
+                    "required": [
+                        "type",
+                        "text"
+                    ]
+                }
+            ]
+        },
+        "Image": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Widget"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "const": "Image"
+                        },
+                        "url": {
+                            "type": "string",
+                            "description": "图片URL，可以是网络地址、本地文件路径或base64数据"
+                        },
+                        "width": {
+                            "anyOf": [
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "number"
+                                }
+                            ],
+                            "description": "图片宽度"
+                        },
+                        "height": {
+                            "anyOf": [
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "number"
+                                }
+                            ],
+                            "description": "图片高度"
+                        },
+                        "size": {
+                            "type": "string",
+                            "enum": [
+                                "cover",
+                                "contain",
+                                "default"
+                            ],
+                            "default": "default",
+                            "description": "图片缩放方式"
+                        }
+                    },
+                    "required": [
+                        "type",
+                        "url",
+                        "width",
+                        "height"
+                    ]
+                }
+            ]
+        },
+        "Padding": {
+            "type": "object",
+            "properties": {
+                "top": {
+                    "oneOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "number"
+                        }
+                    ],
+                    "description": "上内边距"
+                },
+                "right": {
+                    "oneOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "number"
+                        }
+                    ],
+                    "description": "右内边距"
+                },
+                "bottom": {
+                    "oneOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "number"
+                        }
+                    ],
+                    "description": "下内边距"
+                },
+                "left": {
+                    "oneOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "number"
+                        }
+                    ],
+                    "description": "左内边距"
+                }
+            },
+            "required": [
+                "top",
+                "right",
+                "bottom",
+                "left"
+            ]
+        },
+        "Margin": {
+            "type": "object",
+            "properties": {
+                "top": {
+                    "oneOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "number"
+                        }
+                    ],
+                    "description": "上外边距"
+                },
+                "right": {
+                    "oneOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "number"
+                        }
+                    ],
+                    "description": "右外边距"
+                },
+                "bottom": {
+                    "oneOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "number"
+                        }
+                    ],
+                    "description": "下外边距"
+                },
+                "left": {
+                    "oneOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "number"
+                        }
+                    ],
+                    "description": "左外边距"
+                }
+            },
+            "required": [
+                "top",
+                "right",
+                "bottom",
+                "left"
+            ]
+        },
+        "BorderRadius": {
+            "type": "object",
+            "properties": {
+                "top_left": {
+                    "oneOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "number"
+                        }
+                    ],
+                    "description": "左上角圆角半径"
+                },
+                "top_right": {
+                    "oneOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "number"
+                        }
+                    ],
+                    "description": "右上角圆角半径"
+                },
+                "bottom_right": {
+                    "oneOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "number"
+                        }
+                    ],
+                    "description": "右下角圆角半径"
+                },
+                "bottom_left": {
+                    "oneOf": [
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "number"
+                        }
+                    ],
+                    "description": "左下角圆角半径"
+                }
+            },
+            "required": [
+                "top_left",
+                "top_right",
+                "bottom_right",
+                "bottom_left"
+            ]
+        }
+    }
+}

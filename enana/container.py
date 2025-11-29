@@ -84,22 +84,22 @@ class Container(Widget):
                 X >= width - border_radius.top_right
                 and Y <= border_radius.top_right
             ):
-                return (X - width + border_radius.top_right + 1) ** 2 + (
+                return (X - (width - border_radius.top_right)) ** 2 + (
                     Y - border_radius.top_right
                 ) ** 2 <= border_radius.top_right**2
             if (
                 X >= width - border_radius.bottom_right
                 and Y >= height - border_radius.bottom_right
             ):
-                return (X - width + border_radius.bottom_right + 1) ** 2 + (
-                    Y - height + border_radius.bottom_right + 1
+                return (X - (width - border_radius.bottom_right)) ** 2 + (
+                    Y - (height - border_radius.bottom_right)
                 ) ** 2 <= border_radius.bottom_right**2
             if (
                 X <= border_radius.bottom_left
                 and Y >= height - border_radius.bottom_left
             ):
                 return (X - border_radius.bottom_left) ** 2 + (
-                    Y - height + border_radius.bottom_left + 1
+                    Y - (height - border_radius.bottom_left)
                 ) ** 2 <= border_radius.bottom_left**2
         return False
 

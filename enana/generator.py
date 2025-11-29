@@ -1,10 +1,8 @@
 import multiprocessing
-import os
-import sys
 from pathlib import Path
 from typing import Any, Callable, List, Optional, Tuple, Union
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw
 
 try:
     # Get the number of CPU cores for multiprocessing
@@ -93,49 +91,51 @@ def draw_text(
     # Get the image size
     width, height = img.size
     # Create a font object
-    font_obj: Any
-    try:
-        # Check if font is already a font object
-        if hasattr(font, "getbbox"):
-            # Already a font object, use it directly
-            font_obj = font
-        else:
-            # Try to load the specified font
-            font_obj = ImageFont.truetype(font, font_size)
-    except OSError:
-        # If the specified font fails, try to find a fallback font
-        try:
-            # Try common Windows fonts
-            if sys.platform == "win32":
-                # Try to find Arial or a similar font
-                font_files = [
-                    "arial.ttf",
-                    "calibri.ttf",
-                    "times.ttf",
-                    "verdana.ttf",
-                ]
-                font_obj = None
-                for font_file in font_files:
-                    try:
-                        font_path = os.path.join(
-                            r"C:\Windows\Fonts", font_file
-                        )
-                        font_obj = ImageFont.truetype(font_path, font_size)
-                        break
-                    except OSError:
-                        continue
-                # If no Windows font found, use default font
-                if font_obj is None:
-                    font_obj = ImageFont.load_default()
-            else:
-                # On non-Windows platforms, use default font
-                font_obj = ImageFont.load_default()
-        except Exception:
-            # Fallback to default font if all else fails
-            font_obj = ImageFont.load_default()
+    from .utils import get_font
+
+    font_obj = get_font(font, font_size)
     # Create a drawing context
     draw = ImageDraw.Draw(img)
-    # Draw the text on the image
-    draw.text(position, text, font=font_obj, fill=color)
+
+    # 处理自动换行
+    if max_width is None:
+        # 如果没有设置max_width，直接绘制文本
+        draw.text(position, text, font=font_obj, fill=color)
+    else:
+        # 实现自动换行绘制
+        x, y = position
+
+        # 计算单行文本高度
+        line_height = int(
+            draw.textbbox((0, 0), "A", font=font_obj)[3]
+            - draw.textbbox((0, 0), "A", font=font_obj)[1]
+        )
+        line_height = int(line_height * 1.5)  # 行高系数
+
+        # 分割单词
+        words = text.split()
+        if not words:
+            return
+
+        current_line = words[0]
+
+        for word in words[1:]:
+            # 测试当前行加上下一个单词的宽度
+            test_line = f"{current_line} {word}"
+            test_bbox = draw.textbbox((0, 0), test_line, font=font_obj)
+            test_width = int(test_bbox[2] - test_bbox[0])
+
+            if test_width <= max_width:
+                # 如果加上下一个单词后宽度仍在限制内，继续添加
+                current_line = test_line
+            else:
+                # 否则，绘制当前行并开始新行
+                draw.text((x, y), current_line, font=font_obj, fill=color)
+                y += line_height
+                current_line = word
+
+        # 绘制最后一行
+        draw.text((x, y), current_line, font=font_obj, fill=color)
+
     # Save the image
     img.save(image)

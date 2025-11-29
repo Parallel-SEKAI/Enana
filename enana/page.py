@@ -61,13 +61,17 @@ class Page:
                     image=filename,
                     text=text_painter.text,
                     position=(
-                        int(text_painter.offset_x),
-                        int(text_painter.offset_y),
+                        int(text_painter.offset_x * scale),
+                        int(text_painter.offset_y * scale),
                     ),
                     color=text_painter.color,
                     font=text_painter.font,
-                    font_size=text_painter.font_size,
-                    max_width=text_painter.max_width,
+                    font_size=int(text_painter.font_size * scale),
+                    max_width=(
+                        int(text_painter.max_width * scale)
+                        if text_painter.max_width is not None
+                        else None
+                    ),
                 )
 
     def __repr__(self) -> str:

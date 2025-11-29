@@ -25,6 +25,20 @@ class Container(Widget):
         self._border_radius = border_radius or BorderRadius.zero()
         self._child = child
 
+    @property
+    def width(self) -> int | float:
+        if self._width is None:
+            # 触发painters属性计算，这会设置self._width
+            _ = self.painters
+        return super().width
+
+    @property
+    def height(self) -> int | float:
+        if self._height is None:
+            # 触发painters属性计算，这会设置self._height
+            _ = self.painters
+        return super().height
+
     def _paint_func(self, x: int | float, y: int | float) -> bool:
         assert self._width is not None
         assert self._height is not None

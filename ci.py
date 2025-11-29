@@ -1,5 +1,8 @@
 import subprocess
 import sys
+import os
+
+
 
 def run_command(command, description):
     """Run a shell command and check for errors."""
@@ -13,13 +16,14 @@ def run_command(command, description):
             check=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
-            text=True
+            text=True,
         )
         print(f"\n✅ {description} succeeded!")
     except subprocess.CalledProcessError as e:
         print(f"\n❌ {description} failed!")
         print(f"Output:\n{e.stdout}")
         sys.exit(1)
+
 
 def main():
     print("🚀 Starting CI/CD checks...")
@@ -47,23 +51,51 @@ def main():
 
         # 3. 运行 Flake8 代码质量检查
         run_command(
-            ["flake8", path, "--max-line-length", "140"] + (["--color", "always"] if colored else []),
-            f"Flake8 (code quality check) for {path}"
+            ["flake8", path, "--max-line-length", "140"]
+            + (["--color", "always"] if colored else []),
+            f"Flake8 (code quality check) for {path}",
         )
 
         # 4. 运行 Mypy 类型检查
         run_command(
             ["mypy", path] + (["--color"] if colored else []),
-            f"Mypy (type checking) for {path}"
+            f"Mypy (type checking) for {path}",
         )
 
     # 5. 运行 Pytest 测试
     run_command(
-        ["pytest"] + (["--color=yes"] if colored else []),
-        "Pytest (tests)"
+        ["pytest"] + (["--color=yes"] if colored else []), "Pytest (tests)"
     )
 
+    # 6. 生成文档（仅当未提供--check参数时）
+    if not check:
+        print("\n" + "=" * 60)
+        print("Running: Documentation generation")
+        print("Command: python generate_docs.py")
+        print("=" * 60)
+        try:
+            result = subprocess.run(
+                [sys.executable, "generate_docs.py"],
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+            )
+            print(result.stdout)
+            if os.path.isfile("docs/_build/markdown/index.md"):
+                if os.path.isfile("docs.md"):
+                    os.remove("docs.md")
+                os.rename("docs/_build/markdown/index.md", "docs.md")
+            else:
+                print("❌ index.md not found in docs/_build/markdown/")
+            print("✅ Documentation generation succeeded!")
+        except subprocess.CalledProcessError as e:
+            print(f"❌ Documentation generation failed!")
+            print(f"Output:\n{e.stdout}")
+            sys.exit(1)
+
     print("\n🎉 All CI/CD checks passed!")
+
 
 if __name__ == "__main__":
     main()

@@ -6,6 +6,19 @@ from .widget import Widget
 
 
 class Container(Widget):
+    """
+    A container widget that wraps other widgets and provides styling properties.
+
+    Args:
+        width: The width of the container.
+        height: The height of the container.
+        color: The background color of the container in RGBA format.
+        padding: The padding inside the container.
+        margin: The margin outside the container.
+        border_radius: The border radius of the container.
+        child: The child widget to be wrapped by this container.
+    """
+
     def __init__(
         self,
         *,
@@ -27,19 +40,45 @@ class Container(Widget):
 
     @property
     def width(self) -> int | float:
+        """
+        Get the width of the container.
+
+        If the width is not explicitly set, it will be calculated based on the child widget's width.
+
+        Returns:
+            The width of the container.
+        """
         if self._width is None:
-            # 触发painters属性计算，这会设置self._width
+            # Trigger painters property calculation, which will set self._width
             _ = self.painters
         return super().width
 
     @property
     def height(self) -> int | float:
+        """
+        Get the height of the container.
+
+        If the height is not explicitly set, it will be calculated based on the child widget's height.
+
+        Returns:
+            The height of the container.
+        """
         if self._height is None:
-            # 触发painters属性计算，这会设置self._height
+            # Trigger painters property calculation, which will set self._height
             _ = self.painters
         return super().height
 
     def _paint_func(self, x: int | float, y: int | float) -> bool:
+        """
+        Paint function to determine if a pixel should be colored.
+
+        Args:
+            x: The x-coordinate.
+            y: The y-coordinate.
+
+        Returns:
+            True if the pixel should be colored, False otherwise.
+        """
         assert self._width is not None
         assert self._height is not None
         width = self._original_width or (
@@ -105,6 +144,12 @@ class Container(Widget):
 
     @property
     def painters(self) -> List[Painter]:
+        """
+        Get the list of painters for this container.
+
+        Returns:
+            A list of Painter objects that will be used to render this container.
+        """
         if self._width is None:
             if self._child is not None:
                 self._width = (

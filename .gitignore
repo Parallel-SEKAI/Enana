@@ -9,6 +9,40 @@ wheels/
 
 # Virtual environments
 .venv
+.env
+.env.local
+.env.*
+!.env.example
 
+# Documentation build outputs
+docs/_build/
+docs/.doctrees/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Cache
+.cache/
+
+# Trae AI
 .trae
+
+# Generated images
 *.png

@@ -7,6 +7,19 @@ from .widget import Widget
 
 
 class Column(Container):
+    """
+    A vertical layout widget that arranges its children in a column.
+
+    Args:
+        width: The width of the column.
+        height: The height of the column.
+        color: The background color of the column in RGBA format.
+        padding: The padding inside the column.
+        margin: The margin outside the column.
+        border_radius: The border radius of the column.
+        children: The list of child widgets to be arranged vertically.
+    """
+
     def __init__(
         self,
         *,
@@ -31,6 +44,14 @@ class Column(Container):
 
     @property
     def width(self) -> int | float:
+        """
+        Get the width of the column.
+
+        If the width is not explicitly set, it will be calculated based on the maximum width of its children.
+
+        Returns:
+            The width of the column.
+        """
         if self._width is None:
             max_child_width = max(
                 (child.width for child in self._children), default=0
@@ -44,6 +65,14 @@ class Column(Container):
 
     @property
     def height(self) -> int | float:
+        """
+        Get the height of the column.
+
+        If the height is not explicitly set, it will be calculated based on the sum of heights of its children.
+
+        Returns:
+            The height of the column.
+        """
         if self._height is None:
             total_child_height = sum(
                 (child.height for child in self._children), 0
@@ -57,6 +86,12 @@ class Column(Container):
 
     @property
     def painters(self) -> List[Painter]:
+        """
+        Get the list of painters for this column.
+
+        Returns:
+            A list of Painter objects that will be used to render this column.
+        """
         # Ensure dimensions are calculated
         width = self.width
         height = self.height

@@ -7,6 +7,19 @@ from .widget import Widget
 
 
 class Row(Container):
+    """
+    A horizontal layout widget that arranges its children in a row.
+
+    Args:
+        width: The width of the row.
+        height: The height of the row.
+        color: The background color of the row in RGBA format.
+        padding: The padding inside the row.
+        margin: The margin outside the row.
+        border_radius: The border radius of the row.
+        children: The list of child widgets to be arranged horizontally.
+    """
+
     def __init__(
         self,
         *,
@@ -31,6 +44,14 @@ class Row(Container):
 
     @property
     def width(self) -> int | float:
+        """
+        Get the width of the row.
+
+        If the width is not explicitly set, it will be calculated based on the sum of widths of its children.
+
+        Returns:
+            The width of the row.
+        """
         if self._width is None:
             total_child_width = sum(
                 (child.width for child in self._children), 0
@@ -44,6 +65,14 @@ class Row(Container):
 
     @property
     def height(self) -> int | float:
+        """
+        Get the height of the row.
+
+        If the height is not explicitly set, it will be calculated based on the maximum height of its children.
+
+        Returns:
+            The height of the row.
+        """
         if self._height is None:
             max_child_height = max(
                 (child.height for child in self._children), default=0
@@ -57,6 +86,12 @@ class Row(Container):
 
     @property
     def painters(self) -> List[Painter]:
+        """
+        Get the list of painters for this row.
+
+        Returns:
+            A list of Painter objects that will be used to render this row.
+        """
         # Ensure dimensions are calculated
         width = self.width
         height = self.height

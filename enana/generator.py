@@ -88,6 +88,18 @@ def draw_text(
     font_size: int = 12,
     max_width: Optional[int] = None,
 ):
+    """
+    Draw text on an existing image with automatic line wrapping support.
+
+    Args:
+        image: Path to the image file.
+        text: The text to draw.
+        position: The (x, y) coordinates where the text should start.
+        color: The RGBA color of the text.
+        font: The font name or font object to use.
+        font_size: The font size in points.
+        max_width: The maximum width before wrapping occurs.
+    """
     # Open the image
     img = Image.open(image)
     # Get the image size
@@ -99,22 +111,22 @@ def draw_text(
     # Create a drawing context
     draw = ImageDraw.Draw(img)
 
-    # 处理自动换行
+    # Handle automatic line wrapping
     if max_width is None:
-        # 如果没有设置max_width，直接绘制文本
+        # If no max_width is set, draw the text directly
         draw.text(position, text, font=font_obj, fill=color)
     else:
-        # 实现自动换行绘制
+        # Implement automatic line wrapping
         x, y = position
 
-        # 计算单行文本高度
+        # Calculate single line height
         line_height = int(
             draw.textbbox((0, 0), "A", font=font_obj)[3]
             - draw.textbbox((0, 0), "A", font=font_obj)[1]
         )
-        line_height = int(line_height * 1.5)  # 行高系数
+        line_height = int(line_height * 1.5)  # Line height coefficient
 
-        # 分割单词
+        # Split words
         words = text.split()
         if not words:
             return
@@ -122,21 +134,21 @@ def draw_text(
         current_line = words[0]
 
         for word in words[1:]:
-            # 测试当前行加上下一个单词的宽度
+            # Test the width of current line plus the next word
             test_line = f"{current_line} {word}"
             test_bbox = draw.textbbox((0, 0), test_line, font=font_obj)
             test_width = int(test_bbox[2] - test_bbox[0])
 
             if test_width <= max_width:
-                # 如果加上下一个单词后宽度仍在限制内，继续添加
+                # If adding the next word still fits within max_width, continue
                 current_line = test_line
             else:
-                # 否则，绘制当前行并开始新行
+                # Otherwise, draw the current line and start a new one
                 draw.text((x, y), current_line, font=font_obj, fill=color)
                 y += line_height
                 current_line = word
 
-        # 绘制最后一行
+        # Draw the last line
         draw.text((x, y), current_line, font=font_obj, fill=color)
 
     # Save the image
@@ -149,25 +161,25 @@ def draw_image(
     scale: float,
 ):
     """
-    在图片上绘制另一个图片
+    Draw one image onto another image.
 
     Args:
-        image: 目标图片路径
-        image_painter: ImagePainter对象，包含要绘制的图片和相关参数
-        scale: 缩放比例
+        image: Path to the target image file.
+        image_painter: ImagePainter object containing the image to draw and related parameters.
+        scale: Scale factor for the drawing.
     """
-    # 打开目标图片
+    # Open the target image
     img = Image.open(image)
 
-    # 在渲染时调用_resize_image方法，并传递scale因子
+    # Call _resize_image method during rendering with scale factor
     resized_image = image_painter._resize_image(scale)
 
-    # 计算绘制位置
+    # Calculate drawing position
     x = int(image_painter.offset_x * scale)
     y = int(image_painter.offset_y * scale)
 
-    # 绘制图片
+    # Draw the image
     img.paste(resized_image, (x, y), resized_image)
 
-    # 保存图片
+    # Save the image
     img.save(image)

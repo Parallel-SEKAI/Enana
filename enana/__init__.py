@@ -1,3 +1,9 @@
+"""
+Enana - A lightweight Python UI library for generating high-quality image-based UI interfaces.
+
+This module provides the main components and utilities for creating UI interfaces that can be rendered as images.
+"""
+
 # flake8: noqa: F403
 # flake8: noqa: F405
 from .column import Column

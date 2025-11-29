@@ -9,23 +9,30 @@ from .widget import Widget
 
 class DrawFunction:
     """
-    可序列化的绘制函数类，用于在多进程环境中执行绘制操作
+    A serializable drawing function class for executing drawing operations in a multiprocessing environment.
     """
 
     def __init__(self, painters: List, scale: float):
+        """
+        Initialize the DrawFunction.
+
+        Args:
+            painters: List of painters to use for drawing.
+            scale: Scale factor for the drawing.
+        """
         self.painters = painters
         self.scale = scale
 
     def __call__(self, x: int, y: int) -> Tuple[int, int, int, int]:
         """
-        执行绘制操作
+        Execute the drawing operation.
 
         Args:
-            x: x坐标
-            y: y坐标
+            x: x-coordinate
+            y: y-coordinate
 
         Returns:
-            RGBA颜色元组
+            RGBA color tuple
         """
         _x = x / self.scale
         _y = y / self.scale
@@ -36,29 +43,46 @@ class DrawFunction:
 
 
 class Page(Widget):
+    """
+    A page widget that serves as the root container for UI elements.
+    """
+
     def __init__(self, *, child: Widget):
+        """
+        Initialize the Page.
+
+        Args:
+            child: The child widget to be rendered on the page.
+        """
         self.child: Widget = child
 
     @classmethod
     def from_json(cls, json: dict) -> "Page":
         """
-        从JSON字典创建Page对象
+        Create a Page object from a JSON dictionary.
 
         Args:
-            json: JSON字典，符合page.schema.json
+            json: JSON dictionary, conforming to page.schema.json
 
         Returns:
-            Page: 对应的Page对象
+            Page: The corresponding Page object
         """
         widget = super().from_json(json)
         assert isinstance(widget, Page)
         return widget
 
     def paint(self, *, scale: float = 1.0, filename: Path) -> None:
+        """
+        Paint the page to an image file.
+
+        Args:
+            scale: Scale factor for the image, defaults to 1.0.
+            filename: Path to save the generated image.
+        """
         painters = self.child.painters
         painters.sort(key=lambda x: x.z_index, reverse=True)
 
-        # 创建可序列化的绘制函数对象
+        # Create a serializable drawing function object
         draw = DrawFunction(painters, scale)
 
         # print("\n".join([repr(painter) for painter in painters]))

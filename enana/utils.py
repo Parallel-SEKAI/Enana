@@ -8,41 +8,41 @@ from PIL import ImageFont
 
 def always_true(x: int | float, y: int | float) -> bool:
     """
-    始终返回True的函数，用于Painter的func参数
+    A function that always returns True, used for Painter's func parameter
 
     Args:
-        x: x坐标
-        y: y坐标
+        x: x-coordinate
+        y: y-coordinate
 
     Returns:
-        bool: 始终返回True
+        bool: Always returns True
     """
     return True
 
 
 def always_false(x: int | float, y: int | float) -> bool:
     """
-    始终返回False的函数，用于Painter的func参数
+    A function that always returns False, used for Painter's func parameter
 
     Args:
-        x: x坐标
-        y: y坐标
+        x: x-coordinate
+        y: y-coordinate
 
     Returns:
-        bool: 始终返回False
+        bool: Always returns False
     """
     return False
 
 
 def hex_to_rgba(hex_color: int) -> Tuple[int, int, int, int]:
     """
-    将16进制颜色字符串转换为RGBA元组
+    Convert a hexadecimal color integer to an RGBA tuple
 
     Args:
-        hex_color: 16进制颜色 0xRRGGBBAA
+        hex_color: Hexadecimal color in 0xRRGGBBAA format
 
     Returns:
-        Tuple[int, int, int, int]: RGBA元组，每个值范围为0-255
+        Tuple[int, int, int, int]: RGBA tuple with values ranging from 0-255
     """
     r = (hex_color >> 24) & 0xFF
     g = (hex_color >> 16) & 0xFF
@@ -53,14 +53,14 @@ def hex_to_rgba(hex_color: int) -> Tuple[int, int, int, int]:
 
 def get_font(font: Any, font_size: int) -> ImageFont.FreeTypeFont:
     """
-    获取字体对象，支持直接传入字体对象或字体名称
+    Get a font object, supporting both direct font objects and font names
 
     Args:
-        font: 字体对象或字体名称
-        font_size: 字体大小
+        font: Font object or font name
+        font_size: Font size in points
 
     Returns:
-        ImageFont.FreeTypeFont: 字体对象
+        ImageFont.FreeTypeFont: Font object
     """
     font_obj: Any
     try:
@@ -97,10 +97,10 @@ def get_font(font: Any, font_size: int) -> ImageFont.FreeTypeFont:
                 if font_obj is None:
                     font_obj = ImageFont.load_default()
             else:
-                # 在非Windows平台上，使用默认字体
+                # On non-Windows platforms, use the default font
                 font_obj = ImageFont.load_default()
         except Exception:
-            # 如果所有尝试都失败，回退到默认字体
+            # If all attempts fail, fall back to the default font
             font_obj = ImageFont.load_default()
     return font_obj
 
@@ -111,18 +111,18 @@ if typing.TYPE_CHECKING:
 
 def from_json(json: dict) -> "Widget":
     """
-    从JSON字典创建Widget对象
+    Create a Widget object from a JSON dictionary.
 
     Args:
-        json: JSON字典，符合widget.schema.json
+        json: JSON dictionary, conforming to widget.schema.json
 
     Returns:
-        Widget: 对应的Widget对象
+        Widget: The corresponding Widget object
     """
     if "type" not in json:
         raise ValueError("Widget JSON must have a 'type' field")
 
-    # 辅助函数：处理padding、margin和border_radius的不同格式
+    # Helper functions: Handle different formats for padding, margin, and border_radius
     def _parse_padding(value):
         from .typing import Padding
 
